@@ -1,6 +1,5 @@
 <script>
-	import { vec } from "../../../engine/mod"
-	console.log(vec)
+
 </script>
 
 <h1>Welcome to SvelteKit</h1>

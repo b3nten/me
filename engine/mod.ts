@@ -24,24 +24,20 @@ interface ILifecycle {
 
 interface IGameObjectContainer {
 	addComponentToGameObject<T extends Component | Promise<Component>>(gameObject: GameObject, component: T): T;
-
 	removeComponentFromGameObject<T extends Component>(gameObject: GameObject, component: T): T;
-
-	addBehaviorToGameObject<T extends Behavior, Args extends any[]>
-	(gameObject: GameObject, behavior: ConstructorOf<T, [GameObject, ...Args]>, ...args: Args): T;
-
+	addBehaviorToGameObject<
+		T extends Behavior, Args extends any[]
+	>(gameObject: GameObject, behavior: ConstructorOf<T, [GameObject, ...Args]>, ...args: Args): T;
 	removeBehaviorFromGameObject<T extends Behavior>(behavior: T): T;
-
 	destroyGameObject<T extends GameObject>(gameObject: T): T;
-
 	destroyBehavior<T extends Behavior>(behavior: T): T;
 }
 
-class ThreeGameObjectContainer implements IGameObjectContainer {
+class GameObjectContainer implements IGameObjectContainer {
 
 	#root = new Scene
 
-	private gameObjects: Map<GameObject, Group> = new Map;
+	private gameObjects: Set<GameObject> = new Set;
 
 	#state: "idle" | "running" | "destroyed" = "idle"
 	get state() { return this.#state }
@@ -49,14 +45,14 @@ class ThreeGameObjectContainer implements IGameObjectContainer {
 	public run(): void {
 		if(this.#state !== "idle") return;
 		this.#state = "running";
-		for(const [gameObject] of this.gameObjects) {
+		for(const gameObject of this.gameObjects) {
 			this.#startGameObject(gameObject);
 		}
 	}
 
 	public tick(delta: number, elapsed: number): void {
 		if(this.#state !== "running") return;
-		for(const [gameObject] of this.gameObjects) {
+		for(const gameObject of this.gameObjects) {
 			this.#updateGameObject(gameObject, delta, elapsed);
 		}
 	}
@@ -64,16 +60,15 @@ class ThreeGameObjectContainer implements IGameObjectContainer {
 	public destroy(): void {
 		if(this.#state !== "running") return;
 		this.#state = "destroyed";
-		for(const [gameObject] of this.gameObjects) {
+		for(const gameObject of this.gameObjects) {
 			this.destroyGameObject(gameObject);
 		}
 	}
 
 	addGameObject<T extends GameObject, Args extends any[]>(gameObject: ConstructorOf<T, Args>, ...args: Args): T {
 		const instance = GameObject.Create(this, gameObject, ...args);
-		const group = new Group();
 		this.#root.add(group);
-		this.gameObjects.set(instance, group)
+		this.gameObjects.add(instance)
 		if(this.#state === "running") {
 			this.#startGameObject(instance);
 		}
@@ -205,7 +200,6 @@ class GameObject implements ILifecycle {
 	 ***************************************************************************************/
 	components: Component[] = [];
 	behaviors: Behavior[] = [];
-	children: GameObject[] = [];
 
 	created: boolean = false;
 	destroyed: boolean = false;
@@ -285,6 +279,7 @@ abstract class Behavior implements ILifecycle {
 export {
 	GameObject,
 	Behavior,
+	GameObjectContainer,
 	type Component,
 	type IGameObjectContainer,
 	type ILifecycle
