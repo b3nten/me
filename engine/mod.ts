@@ -117,7 +117,7 @@ class World implements IWorld {
 	}
 
 	enableGameObject<T extends GameObject>(gameObject: T): T {
-
+		console.log("LOL")
 	}
 
 	disableGameObject<T extends GameObject>(gameObject: T): T {

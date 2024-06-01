@@ -1,4 +1,5 @@
 .build
+.task
 .dist
 node_modules
 .idea
