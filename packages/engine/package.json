@@ -1,0 +1,16 @@
+{
+  "name": "engine",
+  "type": "module",
+  "dependencies": {
+		"@types/node": "^20.13.0",
+		"postprocessing": "^6.35.4",
+		"three": "^0.165.0",
+		"three-stdlib": "^2.30.2"
+	},
+	"devDependencies": {
+		"@types/three": "^0.165.0",
+		"esbuild": "^0.21.4",
+		"esbuild-plugin-d.ts": "^1.2.3",
+		"typescript": "^5.4.5"
+	}
+}
