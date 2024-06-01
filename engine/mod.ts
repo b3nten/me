@@ -85,7 +85,6 @@ class ThreeGameObjectContainer implements IGameObjectContainer {
 		return gameObject;
 	}
 
-
 	addComponentToGameObject<T extends Component>(gameObject: GameObject, component: T): T {
 		gameObject.components.push(component);
 		const group = this.gameObjects.get(gameObject);
@@ -107,18 +106,19 @@ class ThreeGameObjectContainer implements IGameObjectContainer {
 		return component;
 	}
 
-	addChildToGameObject<T extends GameObject, U extends GameObject>(gameObject: T, child: U): U {
-
-	}
-
-	removeChildFromGameObject<T extends GameObject, U extends GameObject>(gameObject: T, child: U): U {
-
-	}
-
 	addBehaviorToGameObject<T extends Behavior, Args extends any[]>(gameObject: GameObject, behavior: ConstructorOf<T, [GameObject, ...Args]>, ...args: Args): T {
 		const instance = Behavior.Create(gameObject, behavior, ...args);
 		gameObject.behaviors.push(instance);
 		return instance;
+	}
+
+	removeBehaviorFromGameObject<T extends Behavior>(behavior: T): T {
+		const index = behavior.gameObject.behaviors.indexOf(behavior);
+		if(index !== -1) {
+			behavior.gameObject.behaviors.splice(index, 1);
+		}
+		this.#destroyBehavior(behavior);
+		return behavior;
 	}
 
 	destroyBehavior<T extends Behavior>(behavior: T): T {
@@ -241,13 +241,6 @@ class GameObject implements ILifecycle {
 	public removeBehavior<T extends Behavior>(behavior: T): T {
 		return this.container.destroyBehavior(behavior);
 	}
-
-	/***************************************************************************************
-	 EVENTS
-	 ***************************************************************************************/
-
-	onClick?(): void;
-	onKeyPress?(): void;
 }
 
 /***************************************************************************************
@@ -287,13 +280,6 @@ abstract class Behavior implements ILifecycle {
 	onUpdate?(delta: number, elapsed: number): void;
 
 	onDestroy?(): void;
-
-	/***************************************************************************************
-	 EVENTS
-	 ***************************************************************************************/
-
-	onClick?(): void;
-	onKeyPress?(): void;
 }
 
 export {
