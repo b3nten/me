@@ -5,6 +5,7 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/renderer"
+	"github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/util"
 )
 
@@ -35,6 +36,8 @@ func (r *JSONRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
 	reg.Register(ast.KindText, r.text)
 	reg.Register(ast.KindParagraph, r.paragraph)
 	reg.Register(ast.KindEmphasis, r.bold)
+	reg.Register(ast.KindHTMLBlock, r.htmlBlock)
+	reg.Register(ast.KindRawHTML, r.html)
 }
 
 func (r *JSONRenderer) heading(w util.BufWriter, _ []byte, node ast.Node, entering bool) (
@@ -55,7 +58,6 @@ func (r *JSONRenderer) text(w util.BufWriter, src []byte, node ast.Node, enterin
 	ast.WalkStatus, error,
 ) {
 	n := node.(*ast.Text)
-	println(n.Kind().String())
 	WriteText(w, string(n.Segment.Value(src)), entering)
 	return ast.WalkContinue, nil
 }
@@ -64,6 +66,26 @@ func (r *JSONRenderer) bold(w util.BufWriter, src []byte, node ast.Node, enterin
 	ast.WalkStatus, error,
 ) {
 	WriteBlock(w, "bold", "", entering)
+	return ast.WalkContinue, nil
+}
+
+func (r *JSONRenderer) htmlBlock(w util.BufWriter, src []byte, node ast.Node, entering bool) (
+	ast.WalkStatus, error,
+) {
+	n := node.(*ast.HTMLBlock)
+	if entering {
+		n.Dump(src, 0)
+	}
+	return ast.WalkContinue, nil
+}
+
+func (r *JSONRenderer) html(w util.BufWriter, src []byte, node ast.Node, entering bool) (
+	ast.WalkStatus, error,
+) {
+	n := node.(*ast.RawHTML)
+	if entering {
+		n.Dump(src, 0)
+	}
 	return ast.WalkContinue, nil
 }
 
@@ -78,14 +100,21 @@ var r = renderer.NewRenderer(
 var content = []byte(`
 # hello
 
+This is a *test* of this <b>renderer</b>.
 
-This is a *test* of this system
+<Test name="name" />
+
+<Code>child</Code>
+
 `)
 
 func main() {
 	var buf bytes.Buffer
 
-	err := goldmark.New(goldmark.WithRenderer(r)).Convert(content, &buf)
+	err := goldmark.New(
+		goldmark.WithRendererOptions(html.WithUnsafe()),
+		//goldmark.WithRenderer(r),
+	).Convert(content, &buf)
 	if err != nil {
 		println(err.Error())
 	}

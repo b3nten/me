@@ -11,6 +11,9 @@ dependencies:
   '@unocss/reset':
     specifier: ^0.60.3
     version: 0.60.3
+  ogl:
+    specifier: ^1.0.7
+    version: 1.0.7
   three:
     specifier: ^0.165.0
     version: 0.165.0
@@ -2037,6 +2040,10 @@ packages:
       destr: 2.0.3
       node-fetch-native: 1.6.4
       ufo: 1.5.3
+    dev: false
+
+  /ogl@1.0.7:
+    resolution: {integrity: sha512-u6WBAdYcGntZvGWNz5A+Xol8kH0vYu8Ubqkw/JBDx4SUCe4Prwjarxe+BrGWypFh+BMiVJzUXgWZcv+dr1Od2Q==}
     dev: false
 
   /onetime@5.1.2:

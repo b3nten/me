@@ -19,6 +19,7 @@
 	"dependencies": {
 		"@sveltejs/adapter-cloudflare": "^4.4.0",
 		"@unocss/reset": "^0.60.3",
+		"ogl": "^1.0.7",
 		"three": "^0.165.0",
 		"unocss": "^0.60.3"
 	}
