@@ -1,6 +1,11 @@
 import {Renderer, Geometry, Program, Mesh, Vec2} from 'ogl';
+import frag from "./bg.frag?raw"
 
+let mounted = false;
 export function createBackgroundEffect(){
+	if(mounted) return;
+	mounted = true;
+
 	const renderer = new Renderer({
 		width: window.innerWidth,
 		height: window.innerHeight,
@@ -24,10 +29,10 @@ export function createBackgroundEffect(){
 
             void main() {
                 vUv = uv;
-                gl_Position = vec4(position, 0, 1);
+                gl_Position = vec4(position, 0.0, 1.0);
             }
         `,
-		fragment: /* glsl */ `
+		_fragment: /* glsl */ `
 			precision highp float;
 
 			uniform float iTime;
@@ -50,7 +55,7 @@ export function createBackgroundEffect(){
 			{
     			// Normalize coordinates
     			vec2 resolution = iResolution.xy;
-    			vec2 uv = vUv * resolution;
+    			vec2 uv = gl_FragCoord.xy;
     			uv = 0.2 * (uv + uv - resolution) / resolution.y;
 
     			// Initialize output color
@@ -61,12 +66,12 @@ export function createBackgroundEffect(){
     			vec2 w;
     			float time = iTime;
 				float a = 0.5;
-				
+
     			// Loop to calculate color
     			for (float i = 0.0; i < 19.0; i++) {
         			gl_FragColor += (1.0 + cos(vec4(0.0, 1.0, 3.0, 0.0) + time)) /
         				length((1.0 + i * dot(resolution, resolution)) * sin(w * 3.0 - 9.0 * tempUv.yx + time));
-			
+
         			// Update time and tempUv
         			time += 1.0;
         			a += 0.03;
@@ -82,6 +87,7 @@ export function createBackgroundEffect(){
     				- dot(uv -= tempUv, uv) / 250.0;
 			}
 		`,
+		fragment: /* glsl */ frag,
 		uniforms: {
 			iTime: { value: 0.0 },
 			iResolution: { value: new Vec2(gl.canvas.width, gl.canvas.height) }
@@ -96,7 +102,6 @@ export function createBackgroundEffect(){
 		program.uniforms.iResolution.value.x = gl.canvas.width;
 		program.uniforms.iResolution.value.y = gl.canvas.height;
 
-		console.log(program.uniforms.iResolution.value.x, program.uniforms.iResolution.value.y)
 		renderer.render({ scene: mesh });
 	}
 
