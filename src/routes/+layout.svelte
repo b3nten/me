@@ -1,15 +1,14 @@
 <script>
 	import "@unocss/reset/tailwind.css"
 	import { createBackgroundEffect } from "$lib/bg/bg.js";
-	import {onMount} from "svelte";
-	onMount(() => {
-		createBackgroundEffect();
-	});
+	$effect(createBackgroundEffect)
+
+	let {children} = $props()
 </script>
 
 <nav></nav>
 <main>
-	<slot></slot>
+	{@render children()}
 </main>
 <div></div>
 <footer></footer>

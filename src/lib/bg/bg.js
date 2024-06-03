@@ -1,18 +1,92 @@
 import {Renderer, Geometry, Program, Mesh, Vec2} from 'ogl';
 import frag from "./bg.frag?raw"
+import vert from "./bg.vert?raw"
+import {Flowmap} from "./flow.js";
 
-let mounted = false;
+function update(callback){
+	let alive = true
+	const handler = (delta) => {
+		if(!alive) return;
+		requestAnimationFrame(handler)
+		callback(delta)
+	}
+	requestAnimationFrame(handler)
+	return () => alive = false
+}
+
+function fixedUpdate(callback, fps = 50){
+	let t = performance.now();
+	const update = () => {
+		const delta = performance.now() - t
+		t = performance.now()
+		callback(delta)
+	}
+	const interval = setInterval(update, 1000/fps)
+	return () => clearInterval(interval)
+}
+
+function createDisposable(){
+	const disposables = []
+	return {
+		dispose(){
+			for(const disposable of disposables){
+				try { disposable() } catch {}
+			}
+		},
+		cleanup(...disposables){
+			disposables.push(disposables)
+		},
+		disposableEvent(target, type, listener, options){
+			target.addEventListener(type, listener, options)
+			disposables.push(() => target.removeEventListener(type, listener, options))
+		}
+	}
+}
+
 export function createBackgroundEffect(){
-	if(mounted) return;
-	mounted = true;
+
+	const {dispose, cleanup, disposableEvent} = createDisposable()
 
 	const renderer = new Renderer({
 		width: window.innerWidth,
 		height: window.innerHeight,
+		dpr: Math.min(window.devicePixelRatio, 2),
+		antialias: true,
 	});
 
+	const flow = new Flowmap(renderer.gl)
+
+	let lastTime;
+	const mousePosition = new Vec2();
+	const mouseVelocity = new Vec2();
+	const lastMouse = new Vec2();
+
+	disposableEvent(window, 'mousemove', (e) => {
+
+		mousePosition.set(e.x / gl.renderer.width, 1 - e.y / gl.renderer.height);
+
+		if (!lastTime) {
+			lastTime = performance.now();
+			lastMouse.set(e.x, e.y);
+		}
+
+		const deltaX = e.x - lastMouse.x;
+		const deltaY = e.y - lastMouse.y;
+
+		lastMouse.set(e.x, e.y);
+
+		let time = performance.now();
+
+		let delta = Math.max(14, time - lastTime);
+		lastTime = time;
+
+		mouseVelocity.x = deltaX / delta;
+		mouseVelocity.y = deltaY / delta;
+
+		mouseVelocity.needsUpdate = true;
+	})
+
 	const gl = renderer.gl;
-	document.body.appendChild(gl.canvas);
 
 	const geometry = new Geometry(gl, {
 		position: { size: 2, data: new Float32Array([-1, -1, 3, -1, -1, 3]) },
@@ -20,99 +94,49 @@ export function createBackgroundEffect(){
 	});
 
 	const program = new Program(gl, {
-		vertex: /* glsl */ `
-			precision highp float;
-            attribute vec2 uv;
-            attribute vec2 position;
-
-            varying vec2 vUv;
-
-            void main() {
-                vUv = uv;
-                gl_Position = vec4(position, 0.0, 1.0);
-            }
-        `,
-		_fragment: /* glsl */ `
-			precision highp float;
-
-			uniform float iTime;
-			uniform vec2 iResolution;
-			varying vec2 vUv;
-
-			float tanh(float x) {
-    			float e_pos = exp(x);
-    			float e_neg = exp(-x);
-    			return (e_pos - e_neg) / (e_pos + e_neg);
-			}
-			vec2 tanh(vec2 v) {
-    			return vec2(tanh(v.x), tanh(v.y));
-			}
-			vec3 tanh(vec3 v) {
-    			return vec3(tanh(v.x), tanh(v.y), tanh(v.z));
-			}
-
-			void main()
-			{
-    			// Normalize coordinates
-    			vec2 resolution = iResolution.xy;
-    			vec2 uv = gl_FragCoord.xy;
-    			uv = 0.2 * (uv + uv - resolution) / resolution.y;
-
-    			// Initialize output color
-    			gl_FragColor = vec4(-1.5,-1,-.5,0);
-
-    			// Temporary variables
-    			vec2 tempUv = uv;
-    			vec2 w;
-    			float time = iTime;
-				float a = 0.5;
-
-    			// Loop to calculate color
-    			for (float i = 0.0; i < 19.0; i++) {
-        			gl_FragColor += (1.0 + cos(vec4(0.0, 1.0, 3.0, 0.0) + time)) /
-        				length((1.0 + i * dot(resolution, resolution)) * sin(w * 3.0 - 9.0 * tempUv.yx + time));
-
-        			// Update time and tempUv
-        			time += 1.0;
-        			a += 0.03;
-        			resolution = cos(time - 7.0 * tempUv * pow(a, i)) - 5.0 * tempUv;
-        			tempUv *= mat2(cos(i + time * 0.02 - vec4(0., 11., 33., 0.)));
-        			tempUv += 0.005 * tanh(40.0 * dot(tempUv, tempUv) * cos(100.0 * tempUv.yx + time))
-        				+ 0.2 * a * tempUv + 0.003 * cos(time + 4.0 * exp(-0.01 * dot(gl_FragColor, gl_FragColor)));
-        			w = tempUv / (1.0 - 2.0 * dot(tempUv, tempUv));
-    			}
-
-    			// Final color adjustment
-    			gl_FragColor = pow(1.0 - sqrt(exp(-gl_FragColor * gl_FragColor * gl_FragColor / 200.0)), 0.3 * gl_FragColor / gl_FragColor)
-    				- dot(uv -= tempUv, uv) / 250.0;
-			}
-		`,
-		fragment: /* glsl */ frag,
+		vertex: vert,
+		fragment: frag,
 		uniforms: {
-			iTime: { value: 0.0 },
-			iResolution: { value: new Vec2(gl.canvas.width, gl.canvas.height) }
+			u_time: { value: 0.0 },
+			u_resolution: { value: new Vec2(gl.canvas.width, gl.canvas.height) },
+			t_flow : flow.uniform,
 		},
 	});
 
 	const mesh = new Mesh(gl, { geometry, program });
 
-	function update(t) {
-		requestAnimationFrame(update);
-		program.uniforms.iTime.value = t * 0.001;
-		program.uniforms.iResolution.value.x = gl.canvas.width;
-		program.uniforms.iResolution.value.y = gl.canvas.height;
-
-		renderer.render({ scene: mesh });
-	}
-
-	function resize() {
+	disposableEvent(window, 'resize', () => {
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		program.uniforms.iResolution.value.x = gl.canvas.width;
-		program.uniforms.iResolution.value.y = gl.canvas.height;
-	}
+		program.uniforms.u_resolution.value.x = gl.canvas.width;
+		program.uniforms.u_resolution.value.y = gl.canvas.height;
+	})
 
-	window.addEventListener('resize', resize, false);
+	cleanup(
 
-	resize()
-	requestAnimationFrame(update);
+		update((t) => {
+			program.uniforms.u_time.value = t * 0.001;
+			program.uniforms.u_resolution.value.x = gl.canvas.width;
+			program.uniforms.u_resolution.value.y = gl.canvas.height;
+			renderer.render({ scene: mesh });
+		}),
+
+		fixedUpdate((t) => {
+			if (!mouseVelocity.needsUpdate) {
+				mousePosition.set(-1);
+				mouseVelocity.set(0);
+			}
+			mouseVelocity.needsUpdate = false;
+			// Update flowmap inputs
+			flow.aspect = gl.renderer.width / gl.renderer.height;
+			flow.mouse.copy(mousePosition);
+			// Ease velocity input, slower when fading out
+			flow.velocity.lerp(mouseVelocity, mouseVelocity.len() ? 0.5 : 0.1);
+			flow.update();
+		}, 60)
+
+	)
+
+	document.body.appendChild(gl.canvas);
+
+	return dispose
 }

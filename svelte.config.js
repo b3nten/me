@@ -5,8 +5,8 @@ const config = {
 	kit: {
 		adapter: adapter()
 	},
-	vitePlugin: {
-
+	compilerOptions: {
+		runes: true,
 	}
 };
 
