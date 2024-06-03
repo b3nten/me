@@ -1,49 +1,10 @@
 import {Renderer, Geometry, Program, Mesh, Vec2} from 'ogl';
-import frag from "./bg.frag?raw"
-import vert from "./bg.vert?raw"
+import { createDisposable, update, fixedUpdate } from "$lib/toolkit.js";
 import {Flowmap} from "./flow.js";
+import frag from "./background.frag?raw"
+import vert from "./background.vert?raw"
 
-function update(callback){
-	let alive = true
-	const handler = (delta) => {
-		if(!alive) return;
-		requestAnimationFrame(handler)
-		callback(delta)
-	}
-	requestAnimationFrame(handler)
-	return () => alive = false
-}
-
-function fixedUpdate(callback, fps = 50){
-	let t = performance.now();
-	const update = () => {
-		const delta = performance.now() - t
-		t = performance.now()
-		callback(delta)
-	}
-	const interval = setInterval(update, 1000/fps)
-	return () => clearInterval(interval)
-}
-
-function createDisposable(){
-	const disposables = []
-	return {
-		dispose(){
-			for(const disposable of disposables){
-				try { disposable() } catch {}
-			}
-		},
-		cleanup(...disposables){
-			disposables.push(disposables)
-		},
-		disposableEvent(target, type, listener, options){
-			target.addEventListener(type, listener, options)
-			disposables.push(() => target.removeEventListener(type, listener, options))
-		}
-	}
-}
-
-export function createBackgroundEffect(){
+export function createBackgroundEffect(target = document.body){
 
 	const {dispose, cleanup, disposableEvent} = createDisposable()
 
@@ -54,7 +15,11 @@ export function createBackgroundEffect(){
 		antialias: true,
 	});
 
-	const flow = new Flowmap(renderer.gl)
+	const flow = new Flowmap(renderer.gl, {
+		falloff: .1,
+		size: 512,
+		dissipation: .8
+	})
 
 	let lastTime;
 	const mousePosition = new Vec2();
@@ -63,7 +28,7 @@ export function createBackgroundEffect(){
 
 	disposableEvent(window, 'mousemove', (e) => {
 
-		mousePosition.set(e.x / gl.renderer.width, 1 - e.y / gl.renderer.height);
+		mousePosition.set(e.x / renderer.gl.renderer.width, 1 - e.y / renderer.gl.renderer.height);
 
 		if (!lastTime) {
 			lastTime = performance.now();
@@ -86,37 +51,35 @@ export function createBackgroundEffect(){
 		mouseVelocity.needsUpdate = true;
 	})
 
-	const gl = renderer.gl;
-
-	const geometry = new Geometry(gl, {
+	const geometry = new Geometry(renderer.gl, {
 		position: { size: 2, data: new Float32Array([-1, -1, 3, -1, -1, 3]) },
 		uv: { size: 2, data: new Float32Array([0, 0, 2, 0, 0, 2]) },
 	});
 
-	const program = new Program(gl, {
+	const program = new Program(renderer.gl, {
 		vertex: vert,
 		fragment: frag,
 		uniforms: {
 			u_time: { value: 0.0 },
-			u_resolution: { value: new Vec2(gl.canvas.width, gl.canvas.height) },
+			u_resolution: { value: new Vec2(renderer.gl.canvas.width, renderer.gl.canvas.height) },
 			t_flow : flow.uniform,
 		},
 	});
 
-	const mesh = new Mesh(gl, { geometry, program });
+	const mesh = new Mesh(renderer.gl, { geometry, program });
 
 	disposableEvent(window, 'resize', () => {
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		program.uniforms.u_resolution.value.x = gl.canvas.width;
-		program.uniforms.u_resolution.value.y = gl.canvas.height;
+		program.uniforms.u_resolution.value.x = renderer.gl.canvas.width;
+		program.uniforms.u_resolution.value.y = renderer.gl.canvas.height;
 	})
 
 	cleanup(
 
 		update((t) => {
 			program.uniforms.u_time.value = t * 0.001;
-			program.uniforms.u_resolution.value.x = gl.canvas.width;
-			program.uniforms.u_resolution.value.y = gl.canvas.height;
+			program.uniforms.u_resolution.value.x = renderer.gl.canvas.width;
+			program.uniforms.u_resolution.value.y = renderer.gl.canvas.height;
 			renderer.render({ scene: mesh });
 		}),
 
@@ -127,7 +90,7 @@ export function createBackgroundEffect(){
 			}
 			mouseVelocity.needsUpdate = false;
 			// Update flowmap inputs
-			flow.aspect = gl.renderer.width / gl.renderer.height;
+			flow.aspect = renderer.gl.renderer.width / renderer.gl.renderer.height;
 			flow.mouse.copy(mousePosition);
 			// Ease velocity input, slower when fading out
 			flow.velocity.lerp(mouseVelocity, mouseVelocity.len() ? 0.5 : 0.1);
@@ -136,7 +99,7 @@ export function createBackgroundEffect(){
 
 	)
 
-	document.body.appendChild(gl.canvas);
+	target.appendChild(renderer.gl.canvas);
 
 	return dispose
 }
