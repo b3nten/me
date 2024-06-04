@@ -2,10 +2,9 @@
 	import Github from "$lib/icons/Github.svelte";
 	import Artstation from "$lib/icons/Artstation.svelte";
 	import Gear from "$lib/icons/Gear.svelte";
-	import Tooltip from "$lib/components/Tooltip.svelte";
+	import { Popover, Separator, Toggle } from "bits-ui";
 	import {cubicInOut} from "svelte/easing"
-
-	let settingTooltipOpen = $state(false)
+	import {slide} from "svelte/transition";
 
 	let mobileNavOpen = $state(false)
 
@@ -55,15 +54,22 @@
 			</a>
 		</li>
 		<li class="text flex items-center">
-			<button onclick={() => settingTooltipOpen = !settingTooltipOpen} aria-label="settings">
-				<Gear size={30} />
-			</button>
-			<Tooltip {settingTooltipOpen}>
-				<div class="tooltip absolute p-4 rounded-md border border-blue-300/80 overflow-hidden">
-					Hello!
-					<button onclick={() => settingTooltipOpen = false}>close</button>
-				</div>
-			</Tooltip>
+			<Popover.Root>
+				<Popover.Trigger>
+					<Gear size={30} />
+				</Popover.Trigger>
+				<Popover.Content
+						offset={20}
+						transition={slide}
+						transitionConfig={{duration: 100}}
+						class="z-50 text-white font-display p-4 bg-gray/20 backdrop-blur-lg rounded-md border border-blue-300/80 overflow-hidde"
+				>
+					<div class="">SETTINGS</div>
+					<form>
+
+					</form>
+				</Popover.Content>
+			</Popover.Root>
 		</li>
 	</ul>
 	<a href="/" class="text text-3xl" aria-label="home">
@@ -125,14 +131,6 @@
 		transform: translateX(-50%);
 		width: 100%;
 		max-width: min(80%, 1500px);
-	}
-	.tooltip::before {
-		content: "";
-		z-index: -10;
-		position: absolute;
-		inset: 0;
-		background-color: rgba(0, 0, 0, 0.5);
-		backdrop-filter: blur(10px);
 	}
 	.text {
 		color: rgb(219 234 254 / 0.8);

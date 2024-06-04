@@ -8,7 +8,6 @@
 		"preview": "vite preview"
 	},
 	"devDependencies": {
-		"@melt-ui/svelte": "^0.81.0",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-cloudflare": "^4.4.0",
 		"@sveltejs/kit": "2.5.10",
@@ -20,6 +19,7 @@
 	"type": "module",
 	"dependencies": {
 		"@unocss/reset": "^0.60.3",
+		"bits-ui": "^0.21.10",
 		"ogl": "^1.0.7"
 	}
 }

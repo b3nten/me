@@ -1,20 +1,21 @@
 <script>
 	import {fade} from "svelte/transition";
 
-	let { open, children } = $props()
+	let { open = $bindable(), children } = $props()
 
 	let element;
 
 	$effect(() => {
-		console.log('open', open)
 		if(!open) return
 		const handler = (e) => {
 			if (element?.contains(e.target)) return
 			open = false
+			window.removeEventListener("click", handler)
 		}
-		window.addEventListener("click", handler)
+		setTimeout(() => window.addEventListener("click", handler))
 		return () => window.removeEventListener("click", handler)
 	})
+
 </script>
 
 {#if open}
