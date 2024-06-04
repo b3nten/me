@@ -3,6 +3,7 @@ import { createDisposable, update, fixedUpdate } from "$lib/toolkit.js";
 import {Flowmap} from "./flow.js";
 import frag from "./background.frag?raw"
 import vert from "./background.vert?raw"
+import globals from "$lib/globals.svelte.js";
 
 export function createBackgroundEffect(target = document.body){
 
@@ -16,7 +17,7 @@ export function createBackgroundEffect(target = document.body){
 	});
 
 	const flow = new Flowmap(renderer.gl, {
-		falloff: .1,
+		falloff: .2,
 		size: 512,
 		dissipation: .8
 	})
@@ -77,7 +78,7 @@ export function createBackgroundEffect(target = document.body){
 	cleanup(
 
 		update((t) => {
-			program.uniforms.u_time.value = t * 0.001;
+			program.uniforms.u_time.value = t * 0.001 * globals.timeFactor;
 			program.uniforms.u_resolution.value.x = renderer.gl.canvas.width;
 			program.uniforms.u_resolution.value.y = renderer.gl.canvas.height;
 			renderer.render({ scene: mesh });

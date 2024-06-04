@@ -1,8 +1,8 @@
 <script>
-	export let meta
+	let {meta, children} = $props()
 	console.log(meta)
 </script>
 
 <div>
-	<slot></slot>
+	{@render children()}
 </div>

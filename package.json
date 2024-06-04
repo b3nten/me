@@ -8,13 +8,14 @@
 		"preview": "vite preview"
 	},
 	"devDependencies": {
+		"@melt-ui/svelte": "^0.81.0",
 		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/adapter-cloudflare": "^4.4.0",
 		"@sveltejs/kit": "2.5.10",
 		"@sveltejs/vite-plugin-svelte": "4.0.0-next.3",
 		"svelte": "5.0.0-next.148",
-		"vite": "^5.0.3",
-	  	"unocss": "^0.60.3",
-	  "@sveltejs/adapter-cloudflare": "^4.4.0"
+		"unocss": "^0.60.3",
+		"vite": "^5.0.3"
 	},
 	"type": "module",
 	"dependencies": {
