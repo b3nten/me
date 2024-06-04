@@ -3,4 +3,3 @@ export default new class Globals {
 	timeFactor = $state(1.0)
 	constructor(){}
 }
-

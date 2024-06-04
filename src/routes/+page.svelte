@@ -25,6 +25,7 @@
 		font-size: min(max(25vw, 50px), 400px);
 		color: transparent;
 		font-weight: 900;
+		user-select: none;
 	}
 	.ben {
 		top: max(5vw, 10rem);

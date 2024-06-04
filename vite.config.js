@@ -10,11 +10,16 @@ const uno = defineUno({
 			provider: 'google',
 			fonts: {
 				sans: 'Inter',
-				display: "Ubuntu Mono",
+				display: "Play",
 				mono: ['Fira Code'],
 			},
 		})
-	]
+	],
+	theme: {
+		fontFamily: {
+			serif: ["Georgia", "serif"],
+		}
+	}
 })
 
 export default defineConfig({
