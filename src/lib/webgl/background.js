@@ -78,25 +78,30 @@ export function createBackgroundEffect(target = document.body){
 	cleanup(
 
 		update((t) => {
-			program.uniforms.u_time.value = t * 0.001 * globals.timeFactor;
-			program.uniforms.u_resolution.value.x = renderer.gl.canvas.width;
-			program.uniforms.u_resolution.value.y = renderer.gl.canvas.height;
+
+			{
+				program.uniforms.u_time.value = t * 0.001 * globals.timeFactor;
+				program.uniforms.u_resolution.value.x = renderer.gl.canvas.width;
+				program.uniforms.u_resolution.value.y = renderer.gl.canvas.height;
+			}
+
+			{
+				if (!mouseVelocity.needsUpdate) {
+					mousePosition.set(-1);
+					mouseVelocity.set(0);
+				}
+				mouseVelocity.needsUpdate = false;
+				// Update flowmap inputs
+				flow.aspect = renderer.gl.renderer.width / renderer.gl.renderer.height;
+				flow.mouse.copy(mousePosition);
+				// Ease velocity input, slower when fading out
+				flow.velocity.lerp(mouseVelocity, mouseVelocity.len() ? 0.5 : 0.1);
+				flow.update();
+			}
+
 			renderer.render({ scene: mesh });
 		}),
 
-		fixedUpdate((t) => {
-			if (!mouseVelocity.needsUpdate) {
-				mousePosition.set(-1);
-				mouseVelocity.set(0);
-			}
-			mouseVelocity.needsUpdate = false;
-			// Update flowmap inputs
-			flow.aspect = renderer.gl.renderer.width / renderer.gl.renderer.height;
-			flow.mouse.copy(mousePosition);
-			// Ease velocity input, slower when fading out
-			flow.velocity.lerp(mouseVelocity, mouseVelocity.len() ? 0.5 : 0.1);
-			flow.update();
-		}, 60)
 
 	)
 

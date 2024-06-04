@@ -33,7 +33,7 @@
 	{/key}
 </div>
 
-<div id="bg" class="fixed inset-0 -z-10"></div>
+<div id="bg" class="fixed inset-0 -z-40"></div>
 <footer></footer>
 
 <style>
