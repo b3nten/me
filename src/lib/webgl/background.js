@@ -19,7 +19,7 @@ export function createBackgroundEffect(target = document.body){
 	const flow = new Flowmap(renderer.gl, {
 		falloff: .2,
 		size: 512,
-		dissipation: .8
+		dissipation: .9
 	})
 
 	let lastTime;
