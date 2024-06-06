@@ -20,12 +20,11 @@ export default new class Globals {
 				}
 				localStorage.setItem('bgColor', JSON.stringify(this.bgColor))
 				// need to set root css vars
-				const color = chroma.scale([chroma.rgb(255,255,255), chroma.rgb(...this.bgColor.map(c => c*255)), chroma.rgb(0,0,0)]).gamma(2).colors(11)
-				console.log(color)
+				const color = chroma.scale([chroma.rgb(255,255,255), chroma.rgb(...this.bgColor.map(c => c*255)), chroma.rgb(0,0,0)]).gamma(2).colors(11, "rgb")
 				for(let i = 0; i < color.length; i++){
 					document.documentElement.style.setProperty(
 						`--primary-${i === 0 ? '50' : i === 10 ? "950" : i + '00'}`, 
-						color[i]
+						`${color[i]}`
 					)
 				}
 			} catch(e){

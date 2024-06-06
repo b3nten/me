@@ -29,16 +29,16 @@
 	}
 	.ben {
 		top: max(5vw, 10rem);
-		background: linear-gradient(90deg, color-mix(in srgb, var(--primary-300), transparent 75%), rgba(255, 255, 255, 0.85));
+		background: linear-gradient(90deg, color-mix(in srgb, rgb(var(--primary-300)), transparent 75%), rgba(255, 255, 255, 0.85));
 		background-clip: text;
 	}
 	.ten {
-		background: linear-gradient(90deg, rgba(255, 255, 255, 0.85), color-mix(in srgb, var(--primary-300), transparent 75%));
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0.85), color-mix(in srgb, rgb(var(--primary-300)), transparent 75%));
 		background-clip: text;
 	}
 	.blurb {
 		color: transparent;
-		background: linear-gradient(90deg, color-mix(in srgb, var(--primary-600), transparent 20%), rgba(255, 255, 255, 0.96));
+		background: linear-gradient(90deg, color-mix(in srgb, rgb(var(--primary-600)), transparent 20%), rgba(255, 255, 255, 0.96));
 		background-clip: text;
 	}
 </style>

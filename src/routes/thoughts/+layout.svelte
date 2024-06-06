@@ -13,4 +13,4 @@
 	</PageTransition>
 </NormalPage>
 
-<div class="-z-10 fixed inset-0 bg-primary-900/70 backdrop-blur-xl"></div>
+<div class="-z-10 fixed inset-0 bg-primary-900/60 backdrop-blur-lg"></div>

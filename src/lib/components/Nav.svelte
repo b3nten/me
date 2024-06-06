@@ -82,7 +82,7 @@
 								1
 							]}
 							--cp-bg-color="rgb(107 114 128 / 0.5)"
-							--cp-border-color="color-mix(in srgb, var(--primary-100), transparent 50%)"
+							--cp-border-color="color-mix(in srgb, rgb(var(--primary-100)), transparent 50%)"
 						/>	
 					</div>
 				</Popover.Content>
@@ -92,9 +92,9 @@
 	<a href="/" class="text text-3xl" aria-label="home">
 		B<span class="flip">E</span>NT<span class="flip">E</span>N
 	</a>
-	<ul class="hidden md:flex text text-lg">
-		<li><a href="/thoughts" aria-label="thoughts">TH0UGHTS</a></li>
-		<li><a href="/bio" aria-label="bio">BI0</a></li>
+	<ul class="hidden md:flex text-lg">
+		<li><a href="/thoughts" aria-label="thoughts" class='text'>TH0UGHTS</a></li>
+		<li><a href="/bio" aria-label="bio" class='text'>BI0</a></li>
 	</ul>
 	<button
 			class="text md:hidden"
@@ -150,14 +150,14 @@
 		max-width: min(80%, 1500px);
 	}
 	.text {
-		color:  var(--primary-300);
-		fill:   var(--primary-300);
-		stroke: var(--primary-300);
+		color:  rgb(var(--primary-300));
+		fill:   rgb(var(--primary-300));
+		stroke: rgb(var(--primary-300));
 		transition: all 0.2s;
 		&:hover {
-			color: var(--primary-400);
-			fill:  var(--primary-400);
-			stroke: var(--primary-400);
+			color: rgb(var(--primary-400));
+			fill:  rgb(var(--primary-400));
+			stroke:rgb(var(--primary-400));
 		}
 	}
 	.flip {
