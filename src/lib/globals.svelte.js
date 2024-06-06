@@ -5,7 +5,7 @@ export default new class Globals {
 	timeFactor = $state(1.0)
 	showUi = $state(true)
 
-	primaryColor = $state({r: 22, g: -71, b: 140})
+	primaryColor = $state({r: 22, g: 71, b: 140})
 
 	start(){
 
