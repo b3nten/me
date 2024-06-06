@@ -4,6 +4,7 @@ varying vec2 v_uv;
 uniform float u_time;
 uniform vec2 u_resolution;
 uniform sampler2D t_flow;
+uniform vec4 u_color;
 
 float tanh(float x) {
     float e_pos = exp(x);
@@ -27,7 +28,7 @@ void main()
     fragCoord = 0.2 * (fragCoord + fragCoord - res ) / res.y;
     fragCoord += 0.5 * flow.xy;
 
-    vec4 z = gl_FragColor = vec4(-1.5,-1,-.5,0);
+    vec4 z = gl_FragColor = u_color;
     vec2 w = fragCoord;
     float a = .5;
 

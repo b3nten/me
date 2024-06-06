@@ -13,7 +13,7 @@
 		<p class="opacity-50">{meta.date}</p>
 		<ul class="flex items-center space-x-2">
 		{#each meta.tags as tag}
-			<li class=" bg-gray-700 text-white px-2 py-1 rounded">{tag}</li>
+			<li class=" bg-primary-700 text-white px-2 py-1 rounded">{tag}</li>
 		{/each}
 		</ul>
 	</div>

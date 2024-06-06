@@ -2,9 +2,12 @@
 	import Github from "$lib/icons/Github.svelte";
 	import Artstation from "$lib/icons/Artstation.svelte";
 	import Gear from "$lib/icons/Gear.svelte";
-	import { Popover, Separator, Toggle } from "bits-ui";
+	import { Popover, Label } from "bits-ui";
+	import globals from "$lib/globals.svelte.js"
 	import {cubicInOut} from "svelte/easing"
 	import {slide} from "svelte/transition";
+	import Switch from "$lib/components/ui/Switch.svelte";
+    import ColorPicker from "svelte-awesome-color-picker";
 
 	let mobileNavOpen = $state(false)
 
@@ -32,16 +35,15 @@
 	const closeMobileNav = () => {
 		mobileNavOpen = false
 	}
-	const openMobileNav = () => {
-		mobileNavOpen = true
-	}
 	const toggleMobileNav = () => {
 		mobileNavOpen = !mobileNavOpen
 	}
+	
+	const normalizeRgb = (val) => val / 255;
 
 </script>
 
-<nav class="z-40 bg-gray/40 font-display backdrop-blur-md border border-blue-300/50 rounded-full flex justify-between items-center p-x-8 py-2">
+<nav class="relative z-50 bg-gray-500/50 font-display backdrop-blur-md border border-primary-100/50 rounded-full flex justify-between items-center p-x-8 py-2">
 	<ul class="hidden md:flex">
 		<li class="text flex items-center">
 			<a href="https://github.com/b3nten" target="_blank" aria-label="github">
@@ -59,15 +61,30 @@
 					<Gear size={30} />
 				</Popover.Trigger>
 				<Popover.Content
-						offset={20}
 						transition={slide}
 						transitionConfig={{duration: 100}}
-						class="z-50 text-white font-display p-4 bg-gray/20 backdrop-blur-lg rounded-md border border-blue-300/80 overflow-hidde"
+						class="mt-6 z-50 text-white font-display space-y-8 p-4 bg-gray-500/50 backdrop-blur-lg rounded-md border border-primary-100/50 overflow-hidde"
 				>
 					<div class="">SETTINGS</div>
-					<form>
-
-					</form>
+					<div class="flex items-center space-x-2">
+						<Switch bind:value={globals.showUi} />
+						<Label.Root for="marketing" class="text-sm font-medium">SHOW UI</Label.Root>
+					</div>
+					<div>
+						<ColorPicker
+							isTextInput={false}
+							label='COLOR'
+							isAlpha={false}
+							on:input={e => globals.bgColor = [
+								normalizeRgb(e.detail.rgb.r),
+								normalizeRgb(e.detail.rgb.g),
+								normalizeRgb(e.detail.rgb.b),
+								1
+							]}
+							--cp-bg-color="rgb(107 114 128 / 0.5)"
+							--cp-border-color="color-mix(in srgb, var(--primary-100), transparent 50%)"
+						/>	
+					</div>
 				</Popover.Content>
 			</Popover.Root>
 		</li>
@@ -90,7 +107,7 @@
 
 {#if mobileNavOpen}
 	<div class="perspective-1000 fixed inset-0 z-50">
-		<div transition:flipUp class="fixed inset-4 rounded-xl bg-gray/70 backdrop-blur-lg border border-blue-200/80 p-8">
+		<div transition:flipUp class="fixed inset-4 rounded-xl bg-gray/70 backdrop-blur-lg border border-primary-100/50 p-8">
 			<div class="flex items-center justify-between">
 				<a href="/" class="text text-3xl" aria-label="home" onclick={closeMobileNav}>
 					B<span class="flip">E</span>NT<span class="flip">E</span>N
@@ -133,14 +150,14 @@
 		max-width: min(80%, 1500px);
 	}
 	.text {
-		color: rgb(219 234 254 / 0.8);
-		fill: rgb(219 234 254 / 0.8);
-		stroke: rgb(219 234 254 / 0.8);
+		color:  var(--primary-300);
+		fill:   var(--primary-300);
+		stroke: var(--primary-300);
 		transition: all 0.2s;
 		&:hover {
-			color: rgb(219 234 254 / 1);
-			fill: rgb(219 234 254 / 1);
-			stroke: rgb(219 234 254 / 1);
+			color: var(--primary-400);
+			fill:  var(--primary-400);
+			stroke: var(--primary-400);
 		}
 	}
 	.flip {

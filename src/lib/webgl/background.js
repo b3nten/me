@@ -1,9 +1,10 @@
-import {Renderer, Geometry, Program, Mesh, Vec2} from 'ogl';
+import {Renderer, Geometry, Program, Mesh, Vec2, Vec4} from 'ogl';
 import { createDisposable, update, fixedUpdate } from "$lib/toolkit.js";
 import {Flowmap} from "./flow.js";
 import frag from "./background.frag?raw"
 import vert from "./background.vert?raw"
 import globals from "$lib/globals.svelte.js";
+import { untrack } from "svelte";
 
 export function createBackgroundEffect(target = document.body){
 
@@ -17,7 +18,7 @@ export function createBackgroundEffect(target = document.body){
 	});
 
 	const flow = new Flowmap(renderer.gl, {
-		falloff: .2,
+		falloff: .25,
 		size: 512,
 		dissipation: .9
 	})
@@ -64,6 +65,7 @@ export function createBackgroundEffect(target = document.body){
 			u_time: { value: 0.0 },
 			u_resolution: { value: new Vec2(renderer.gl.canvas.width, renderer.gl.canvas.height) },
 			t_flow : flow.uniform,
+			u_color: { value: new Vec4(...untrack(() => globals.bgColor)) }
 		},
 	});
 
@@ -83,6 +85,7 @@ export function createBackgroundEffect(target = document.body){
 				program.uniforms.u_time.value = t * 0.001 * globals.timeFactor;
 				program.uniforms.u_resolution.value.x = renderer.gl.canvas.width;
 				program.uniforms.u_resolution.value.y = renderer.gl.canvas.height;
+				program.uniforms.u_color.value.set(...untrack(() => globals.bgColor.map(m => m * 2 - 1.5)));
 			}
 
 			{
