@@ -1,10 +1,19 @@
 <script>
 	import NormalPage from "$lib/components/BasePageLayout.svelte";
 	import PageTransition from "$lib/components/PageTransition.svelte";
+	import globals from "$lib/globals.svelte";
+    import { onMount } from "svelte";
 
 	let {children, data } = $props();
 
 	let url = $derived(data.url.split('/')[2])
+
+	onMount(() => {
+		globals.timeFactor = .3;
+		return () => {
+			globals.timeFactor = 1;
+		}
+	})
 </script>
 
 <NormalPage>
