@@ -38,8 +38,6 @@
 	const toggleMobileNav = () => {
 		mobileNavOpen = !mobileNavOpen
 	}
-	
-	const normalizeRgb = (val) => val / 255;
 
 </script>
 
@@ -72,15 +70,11 @@
 					</div>
 					<div>
 						<ColorPicker
+							
 							isTextInput={false}
 							label='COLOR'
 							isAlpha={false}
-							on:input={e => globals.bgColor = [
-								normalizeRgb(e.detail.rgb.r),
-								normalizeRgb(e.detail.rgb.g),
-								normalizeRgb(e.detail.rgb.b),
-								1
-							]}
+							bind:rgb={globals.primaryColor}
 							--cp-bg-color="rgb(107 114 128 / 0.5)"
 							--cp-border-color="color-mix(in srgb, rgb(var(--primary-100)), transparent 50%)"
 						/>	

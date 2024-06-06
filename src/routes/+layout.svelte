@@ -7,13 +7,13 @@
 	import { createBackgroundEffect } from "$lib/webgl/background.js";
 	import PageTransition from "$lib/components/PageTransition.svelte";
 	import globals from "$lib/globals.svelte.js"
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
 
 	onMount(() => {
 		globals.start()
 	})
 	
-	$effect(() => createBackgroundEffect(document.getElementById("bg")))
+	onMount(() => createBackgroundEffect(document.getElementById("bg")))
 
 	let {children, data} = $props()
 

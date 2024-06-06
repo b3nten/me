@@ -58,6 +58,7 @@ export function createBackgroundEffect(target = document.body){
 		uv: { size: 2, data: new Float32Array([0, 0, 2, 0, 0, 2]) },
 	});
 
+
 	const program = new Program(renderer.gl, {
 		vertex: vert,
 		fragment: frag,
@@ -65,7 +66,7 @@ export function createBackgroundEffect(target = document.body){
 			u_time: { value: 0.0 },
 			u_resolution: { value: new Vec2(renderer.gl.canvas.width, renderer.gl.canvas.height) },
 			t_flow : flow.uniform,
-			u_color: { value: new Vec4(...untrack(() => globals.bgColor)) }
+			u_color: { value: new Vec4(0, 0, 0, 0) }
 		},
 	});
 
@@ -85,7 +86,8 @@ export function createBackgroundEffect(target = document.body){
 				program.uniforms.u_time.value = t * 0.001 * globals.timeFactor;
 				program.uniforms.u_resolution.value.x = renderer.gl.canvas.width;
 				program.uniforms.u_resolution.value.y = renderer.gl.canvas.height;
-				program.uniforms.u_color.value.set(...untrack(() => globals.bgColor.map(m => m * 2 - 1.5)));
+				const c = globals.primaryColor;
+				program.uniforms.u_color.value.set((c.r/255)*2-1.5, (c.g/255)*2-1.5, (c.b/255)*2-1.5, 0);
 			}
 
 			{
