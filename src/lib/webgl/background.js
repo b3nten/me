@@ -83,7 +83,7 @@ export function createBackgroundEffect(target = document.body){
 		update((t) => {
 
 			{
-				program.uniforms.u_time.value = t * 0.001 * globals.timeFactor;
+				program.uniforms.u_time.value += 0.01 * globals.timeFactor;
 				program.uniforms.u_resolution.value.x = renderer.gl.canvas.width;
 				program.uniforms.u_resolution.value.y = renderer.gl.canvas.height;
 				const c = globals.primaryColor;

@@ -9,13 +9,13 @@
 	}
 </script>
 
-<h1 class="text-8xl font-display text-white">Thoughts</h1>
+<h1 class="text-5xl md:text-8xl font-display text-white">Thoughts</h1>
 <div class="py-4"></div>
 
 <div class="griddy">
 	{#each posts as post}
 		<div class="text-white/60">{formatDate(post.date)}</div>
-		<a class="text-2xl text-white" href={`/thoughts/t/${post.slug}`}>{post.title}</a>
+		<a class="text-lg md:text-2xl text-white" href={`/thoughts/t/${post.slug}`}>{post.title}</a>
 	{/each}
 </div>
 
