@@ -9,7 +9,7 @@
 	>
 		TƎN
 	</p>
-	<p class="blurb absolute bottom-94 left-8 sm:left-12 xl:left-48 text-xl sm:text-2xl font-bold">
+	<p class="blurb absolute bottom-[35vh] left-8 sm:left-12 xl:left-48 text-xl sm:text-2xl font-bold">
 		Software developer and 3d artist.
 		<br />
 		Building experences for the modern web.
