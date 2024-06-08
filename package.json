@@ -1,28 +1,27 @@
 {
-	"name": "site",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"preview": "vite preview"
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-auto": "^3.0.0",
-		"@sveltejs/adapter-cloudflare": "^4.4.0",
-		"@sveltejs/kit": "2.5.10",
-		"@sveltejs/vite-plugin-svelte": "4.0.0-next.3",
-		"svelte": "5.0.0-next.148",
-		"unocss": "^0.60.3",
-		"vite": "^5.0.3"
-	},
-	"type": "module",
-	"dependencies": {
-		"@unocss/reset": "^0.60.3",
-		"bits-ui": "^0.21.10",
-		"chroma-js": "^2.4.2",
-		"ogl": "^1.0.7",
-		"svelte-awesome-color-picker": "^3.1.0",
-		"values.js": "^2.1.1"
-	}
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.0.0-alpha.16",
+    "@vonojs/core": "^0.2.5",
+    "esbuild": "^0.21.4",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.12",
+    "vite-plugin-solid": "^2.10.2"
+  },
+  "dependencies": {
+    "@ark-ui/solid": "^3.2.2",
+    "@css-hooks/solid": "^2.0.4",
+    "@solidjs/router": "^0.13.5",
+    "chroma-js": "^2.4.2",
+    "css-hooks-basic": "^0.1.1",
+    "hono": "^4.4.4",
+    "ogl": "^1.0.7",
+    "solid-js": "^1.8.17",
+    "solid-transition-group": "^0.2.3",
+    "tailwindcss": "4.0.0-alpha.16"
+  }
 }
