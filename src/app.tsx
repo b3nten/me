@@ -16,6 +16,7 @@ import {
   Show,
   Suspense,
 } from "solid-js";
+import { MetaProvider, Title } from "@solidjs/meta";
 
 const Settings = lazy(() => import("./settings"));
 
@@ -62,24 +63,26 @@ export default function App(props) {
         class="transition-opacity duration-500 delay-500"
         style={{ opacity: webglLoaded.value ? 1 : 0 }}
       >
-        <ErrorBoundary fallback={"Error"}>
-          <Suspense>
-            <Router url={props.path} root={RootLayout}>
-              <Route path="/" component={Home} />
-              <Route component={PageLayout}>
-                <Route path="/bio" component={Bio} />
-                <Route path="/thoughts" component={BlurredBackground}>
-                  <Route path="/" component={ThoughtList} />
-                  <For each={posts}>
-                    {(post) => (
-                      <Route path={post.slug} component={post.default} />
-                    )}
-                  </For>
+        <MetaProvider>
+          <ErrorBoundary fallback={"Error"}>
+            <Suspense>
+              <Router url={props.path} root={RootLayout}>
+                <Route path="/" component={Home} />
+                <Route component={PageLayout}>
+                  <Route path="/bio" component={Bio} />
+                  <Route path="/thoughts" component={BlurredBackground}>
+                    <Route path="/" component={ThoughtList} />
+                    <For each={posts}>
+                      {(post) => (
+                        <Route path={post.slug} component={post.default} />
+                      )}
+                    </For>
+                  </Route>
                 </Route>
-              </Route>
-            </Router>
-          </Suspense>
-        </ErrorBoundary>
+              </Router>
+            </Suspense>
+          </ErrorBoundary>
+        </MetaProvider>
       </body>
     </html>
   );
@@ -411,29 +414,34 @@ const homeStyles = defineStyles({
 
 const Home = () => {
   return (
-    <div class="fixed inset-0 z-10 overflow-hidden">
-      <p
-        style={css(homeStyles.benten, homeStyles.ben)}
-        class="left-3vw leading-[.8] font-sans"
-      >
-        BƎN
-      </p>
-      <p
-        style={css(homeStyles.benten, homeStyles.ten)}
-        class="bottom-[5vw] right-[3vw] leading-[.8] font-sans"
-      >
-        TƎN
-      </p>
-      <p
-        style={css(homeStyles.blurb)}
-        class="left-8 sm:left-12 xl:left-48 text-xl sm:text-2xl"
-      >
-        Software developer and 3d artist.
-        <br />
-        Building experences for the modern web.
-        <br />
-      </p>
-    </div>
+    <>
+      <Title>
+        BƎNTƎN
+      </Title>
+      <div class="fixed inset-0 z-10 overflow-hidden">
+        <p
+          style={css(homeStyles.benten, homeStyles.ben)}
+          class="left-3vw leading-[.8] font-sans"
+        >
+          BƎN
+        </p>
+        <p
+          style={css(homeStyles.benten, homeStyles.ten)}
+          class="bottom-[5vw] right-[3vw] leading-[.8] font-sans"
+        >
+          TƎN
+        </p>
+        <p
+          style={css(homeStyles.blurb)}
+          class="left-8 sm:left-12 xl:left-48 text-xl sm:text-2xl"
+        >
+          Software developer and 3d artist.
+          <br />
+          Building experences for the modern web.
+          <br />
+        </p>
+      </div>
+    </>
   );
 };
 
@@ -460,6 +468,7 @@ const ThoughtList = () => {
 
   return (
     <div>
+      <Title>BƎNTƎN - Thoughts</Title>
       <h1 class="text-5xl md:text-8xl font-display text-white">Thoughts</h1>
       <div class="py-4"></div>
       <ul>
@@ -484,6 +493,7 @@ const ThoughtList = () => {
 const Bio = () => {
   return (
     <div>
+      <Title>BƎNTƎN - Bio</Title>
       <div class="w-full min-h-90 rounded-xl border border-primary-100/50 bg-gray-500/50 backdrop-blur-lg p-8 text-primary-100">
         <h1 class="text-4xl md:text-7xl font-display">BIO</h1>
       </div>

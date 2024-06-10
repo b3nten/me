@@ -1,3 +1,4 @@
+import { Title } from "@solidjs/meta";
 import { For, ParentProps } from "solid-js";
 
 const LeftArrow = (props: { size?: number }) => (
@@ -21,6 +22,7 @@ type Meta = {
 export function Thought(props: ParentProps<{ meta: Meta }>) {
   return (
     <div class="text-white max-w-3xl mx-auto">
+      <Title>{props.meta.title}</Title>
       <a
         class="text-lg opacity-50 hover:opacity-100 hover:bg-gray/50 transition rounded-md p-2 font-display inline-flex items-center space-x-2"
         href="/thoughts"
