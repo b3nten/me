@@ -13,20 +13,5 @@ export default defineConfig({
       adaptor: new CloudflareAdaptor(),
       includeIndexHtml: true,
     }),
-  ],
-  build: {
-    minify: false,
-    cssMinify: true,
-    target: "es2022",
-    rollupOptions: {
-      output: {
-        format: "es",
-        manualChunks: (id) => {
-          if (id.includes("src/settings.tsx")) return "settings";
-          if (id.endsWith("src/toolkit.ts")) return "toolkit";
-          if (id.endsWith("src/webgl/background.js")) return "background";
-        },
-      },
-    },
-  },
+  ]
 });
