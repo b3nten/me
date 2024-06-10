@@ -24,7 +24,7 @@ const Settings = lazy(() => import("./settings"));
  *****************************************************************************************/
 
 const postImports = Object.entries(
-  import.meta.glob("../thoughts/**.*", { eager: true }),
+  import.meta.glob("../content/thoughts/**.*", { eager: true }),
 );
 const posts = postImports.map(([path, content]) => ({
   // @ts-ignore
@@ -59,7 +59,7 @@ export default function App(props) {
         </NoHydration>
       </head>
       <body
-        class="transition-opacity duration-500"
+        class="transition-opacity duration-500 delay-500"
         style={{ opacity: webglLoaded.value ? 1 : 0 }}
       >
         <ErrorBoundary fallback={"Error"}>
@@ -106,7 +106,9 @@ const Background = () => {
     }
   });
 
-  return <div ref={background} class="fixed inset-0 -z-50" />;
+  return (
+    <div ref={background} class="fixed top-0 left-0 w-full h-screen -z-50" />
+  );
 };
 
 /****************************************************************************************
@@ -176,7 +178,7 @@ const navStyles = defineStyles({
     "color": "var(--primary-300)",
     "fill": "var(--primary-300)",
     "stroke": "var(--primary-300)",
-    
+
     "transition": "all 0.2s",
 
     "&:hover": {
@@ -255,65 +257,75 @@ const Nav = () => {
           M<span class="flip">E</span>NU
         </button>
       </nav>
-      <Transition name="flip">
-        <Show when={showMobileNavMenu.value}>
-          <div class="fixed z-50 inset-4 rounded-xl bg-gray/70 backdrop-blur-lg border border-primary-100/50 p-8">
-            <div class="flex items-center justify-between">
-              <a
-                href="/"
-                style={css(navStyles.hoverableText)}
-                class="text-3xl cursor-pointer"
-                aria-label="home"
-                onclick={closeMobileNav}
-              >
-                B<span class="flip">E</span>NT<span class="flip">E</span>N
-              </a>
-              <button
-                style={css(navStyles.hoverableText)}
-                class="text-2xl font-bold font-display"
-                onclick={closeMobileNav}
-              >
-                CLOS<span class="flip">E</span>
-              </button>
-            </div>
-            <ul
-              style={css(navStyles.hoverableText)}
-              class="flex flex-col items-start gap-4 text-2xl mt-12"
-            >
-              <li>
+      <div
+        class="fixed z-50 inset-4"
+        style={{
+          perspective: "1000px",
+          "pointer-events": showMobileNavMenu.value ? "all" : "none",
+        }}
+      >
+        <Transition name="flip">
+          <Show when={showMobileNavMenu.value}>
+            <div class="absolute inset-0 rounded-xl bg-gray/70 backdrop-blur-lg border border-primary-100/50 p-8">
+              <div class="flex items-center justify-between">
                 <a
-                  href="/thoughts"
-                  aria-label="thoughts"
+                  href="/"
+                  style={css(navStyles.hoverableText)}
+                  class="text-3xl cursor-pointer"
+                  aria-label="home"
                   onclick={closeMobileNav}
                 >
-                  TH0UGHTS
+                  B<span class="flip">E</span>NT<span class="flip">E</span>N
                 </a>
-              </li>
-              <li>
-                <a href="/bio" aria-label="bio" onclick={closeMobileNav}>BI0</a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/b3nten"
-                  target="_blank"
-                  aria-label="github"
+                <button
+                  style={css(navStyles.hoverableText)}
+                  class="text-2xl font-bold font-display"
+                  onclick={closeMobileNav}
                 >
-                  GITHUB
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.artstation.com/benten28"
-                  target="_blank"
-                  aria-label="artstation"
-                >
-                  ARTSTATION
-                </a>
-              </li>
-            </ul>
-          </div>
-        </Show>
-      </Transition>
+                  CLOS<span class="flip">E</span>
+                </button>
+              </div>
+              <ul
+                style={css(navStyles.hoverableText)}
+                class="flex flex-col items-start gap-4 text-2xl mt-12"
+              >
+                <li>
+                  <a
+                    href="/thoughts"
+                    aria-label="thoughts"
+                    onclick={closeMobileNav}
+                  >
+                    TH0UGHTS
+                  </a>
+                </li>
+                <li>
+                  <a href="/bio" aria-label="bio" onclick={closeMobileNav}>
+                    BI0
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/b3nten"
+                    target="_blank"
+                    aria-label="github"
+                  >
+                    GITHUB
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.artstation.com/benten28"
+                    target="_blank"
+                    aria-label="artstation"
+                  >
+                    ARTSTATION
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </Show>
+        </Transition>
+      </div>
     </Show>
   );
 };

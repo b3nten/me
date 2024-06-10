@@ -1,11 +1,5 @@
 @import "tailwindcss";
 
-@layer utilities {
-    .backdrop-hack {
-        @apply absolute inset-0 -z-10;
-    }
-}
-
 @theme {
     --color-primary-50: var(--primary-50);
     --color-primary-100: var(--primary-100);
@@ -37,7 +31,6 @@
 }
 
 body {
-    perspective: 1000px;
     overflow-x: hidden;
 }
 

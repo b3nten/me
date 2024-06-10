@@ -6,7 +6,6 @@ import vert from "./background.vert?raw";
 import { primaryColor, timeFactor, webglLoaded } from "../globals";
 
 export function createBackgroundEffect(target = document.body) {
-
   const { dispose, cleanup, disposableEvent } = createDisposable();
 
   const renderer = new Renderer({

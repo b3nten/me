@@ -41,19 +41,23 @@ app.get("*", async (c) => {
 
   const head = [<script type="module" src={`/${resources.file}`} />, ...fonts];
 
-  if(resources.css.length > 0){
+  if (resources.css?.length > 0) {
     head.push(
-      ...resources.css.map((href) => <link rel="stylesheet" href={href} />),
+      ...resources.css.map((href) => (
+        <link rel="stylesheet" href={`/${href}`} />
+      )),
     );
   }
 
-  if(resources.assets.length > 0){ 
+  if (resources.assets?.length > 0) {
     head.push(
-      ...resources.assets.map((href) => <script type="module" src={href} />),
+      ...resources.assets.map((href) => (
+        <script type="module" src={`/${href}`} />
+      )),
     );
   }
 
-  if (resources.imports.length > 0) {
+  if (resources.imports?.length > 0) {
     for await (const href of resources.imports) {
       head.push(
         <script type="module" src={`/${(await getModuleInfo(href))?.file}`} />,
