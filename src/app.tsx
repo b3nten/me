@@ -176,7 +176,8 @@ const navStyles = defineStyles({
   },
 });
 
-const hoverClasses = `text-primary-300 hover:text-primary-500 fill-primary-300 hover:fill-primary-500 stroke-primary-300 hover:stroke-primary-500 transition-colors`;
+const hoverClasses =
+  `text-primary-300 hover:text-primary-500 fill-primary-300 hover:fill-primary-500 stroke-primary-300 hover:stroke-primary-500 transition-colors`;
 
 const Nav = () => {
   const closeMobileNav = () => showMobileNavMenu.value = false;
@@ -271,7 +272,10 @@ const Nav = () => {
                 </button>
               </div>
               <ul
-                class={cx(hoverClasses, "flex flex-col items-start gap-4 text-2xl mt-1")}
+                class={cx(
+                  hoverClasses,
+                  "flex flex-col items-start gap-4 text-2xl mt-1",
+                )}
               >
                 <li>
                   <a
@@ -475,8 +479,15 @@ const Bio = () => {
   return (
     <div>
       <Title>BƎNTƎN - Bio</Title>
-      <div class="w-full min-h-90 rounded-xl border border-primary-100/50 bg-gray-500/50 backdrop-blur-lg p-8 text-primary-100">
-        <h1 class="text-4xl md:text-7xl font-display">BIO</h1>
+      <div class="w-full max-w-4xl mx-auto min-h-90 rounded-xl border border-primary-100/50 bg-gray-500/50 backdrop-blur-lg p-8 text-primary-100">
+        <h1 class="text-4xl md:text-7xl font-display mb-8 -translate-x-[6px]">
+          BIO
+        </h1>
+        <p>
+          Hey, thanks for dropping by. My name is Benton and I am a software
+          developer and 3d artist.
+          <br />
+        </p>
       </div>
     </div>
   );

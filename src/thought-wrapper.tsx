@@ -35,13 +35,15 @@ export function Thought(props: ParentProps<{ meta: Meta }>) {
       <div class="mt-2 md:text-lg font-display flex items-center space-x-2">
         <p class="opacity-50">{props.meta.date}</p>
         <ul class="flex items-center space-x-2">
-          {/* <For each={props.meta.tags}>
+          {
+            /* <For each={props.meta.tags}>
             {(tag) => (
               <li class=" bg-primary-700 saturate-50 text-white px-2 py-1 rounded">
                 {tag}
               </li>
             )}
-          </For> */}
+          </For> */
+          }
         </ul>
       </div>
       <article class="mt-20 text-lg font-serif">

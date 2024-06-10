@@ -60,8 +60,8 @@ const Colors = () => {
                   orientation="vertical"
                   class="h-full w-4"
                 >
-                  <ColorPicker.ChannelSliderTrack class="w-full h-full" />
-                  <ColorPicker.ChannelSliderThumb class="w-4 h-4 -translate-x-2 border-2 border-primary-100 rounded-full" />
+                  <ColorPicker.ChannelSliderTrack class="w-full h-full scale-y-[-1]" />
+                  <ColorPicker.ChannelSliderThumb class="w-4 h-4 -translate-x-2 -translate-y-2 border-2 border-primary-100 rounded-full" />
                 </ColorPicker.ChannelSlider>
               </ColorPicker.Content>
             </ColorPicker.Positioner>
