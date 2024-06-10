@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@ark-ui/solid": "^3.2.2",
+    "@css-hooks/core": "^2.0.4",
     "@css-hooks/solid": "^2.0.4",
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.13.5",

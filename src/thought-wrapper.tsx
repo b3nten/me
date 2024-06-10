@@ -24,7 +24,7 @@ export function Thought(props: ParentProps<{ meta: Meta }>) {
     <div class="text-white max-w-3xl mx-auto">
       <Title>{props.meta.title}</Title>
       <a
-        class="text-lg opacity-50 hover:opacity-100 hover:bg-gray/50 transition rounded-md p-2 font-display inline-flex items-center space-x-2"
+        class="text-lg opacity-50 hover:opacity-100 hover:bg-gray/50 transition rounded-md p-2 font-display inline-flex items-center -translate-x-3 space-x-2"
         href="/thoughts"
       >
         <LeftArrow size={18} /> back
@@ -32,16 +32,16 @@ export function Thought(props: ParentProps<{ meta: Meta }>) {
       <h1 class="text-4xl md:text-7xl font-bold leading-tight">
         {props.meta.title}
       </h1>
-      <div class="mt-12 md:text-lg font-display flex items-center space-x-2">
+      <div class="mt-2 md:text-lg font-display flex items-center space-x-2">
         <p class="opacity-50">{props.meta.date}</p>
         <ul class="flex items-center space-x-2">
-          <For each={props.meta.tags}>
+          {/* <For each={props.meta.tags}>
             {(tag) => (
               <li class=" bg-primary-700 saturate-50 text-white px-2 py-1 rounded">
                 {tag}
               </li>
             )}
-          </For>
+          </For> */}
         </ul>
       </div>
       <article class="mt-20 text-lg font-serif">

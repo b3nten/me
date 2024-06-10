@@ -1,7 +1,7 @@
 import { HydrationScript, NoHydration } from "solid-js/web";
 import { createBackgroundEffect } from "./webgl/background";
 import { Route, Router, useLocation } from "@solidjs/router";
-import { color, css, defineStyles, styleSheet } from "./toolkit";
+import { color, css, cx, defineStyles, styleSheet } from "./toolkit";
 import { showMobileNavMenu, showUi, timeFactor, webglLoaded } from "./globals";
 import { Transition, TransitionGroup } from "solid-transition-group";
 import {
@@ -122,12 +122,10 @@ const DEFAULT_ICON_SIZE = 24;
 
 const Artstation = (props: { size?: number }) => (
   <svg
-    fill="inherit"
-    stroke="inherit"
+    class={hoverClasses}
     width={props.size ?? DEFAULT_ICON_SIZE}
     height={props.size ?? DEFAULT_ICON_SIZE}
     viewBox="0 0 24 24"
-    role="img"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path d="M0 17.723l2.027 3.505h.001a2.424 2.424 0 0 0 2.164 1.333h13.457l-2.792-4.838H0zm24 .025c0-.484-.143-.935-.388-1.314L15.728 2.728a2.424 2.424 0 0 0-2.142-1.289H9.419L21.598 22.54l1.92-3.325c.378-.637.482-.919.482-1.467zm-11.129-3.462L7.428 4.858l-5.444 9.428h10.887z" />
@@ -136,12 +134,11 @@ const Artstation = (props: { size?: number }) => (
 
 const Github = (props: { size?: number }) => (
   <svg
-    fill="inherit"
-    stroke="inherit"
-    xmlns="http://www.w3.org/2000/svg"
+    class={hoverClasses}
     width={props.size ?? DEFAULT_ICON_SIZE}
     height={props.size ?? DEFAULT_ICON_SIZE}
     viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
   >
     <path d="M10.9,2.1c-4.6,0.5-8.3,4.2-8.8,8.7c-0.6,5,2.5,9.3,6.9,10.7v-2.3c0,0-0.4,0.1-0.9,0.1c-1.4,0-2-1.2-2.1-1.9 c-0.1-0.4-0.3-0.7-0.6-1C5.1,16.3,5,16.3,5,16.2C5,16,5.3,16,5.4,16c0.6,0,1.1,0.7,1.3,1c0.5,0.8,1.1,1,1.4,1c0.4,0,0.7-0.1,0.9-0.2 c0.1-0.7,0.4-1.4,1-1.8c-2.3-0.5-4-1.8-4-4c0-1.1,0.5-2.2,1.2-3C7.1,8.8,7,8.3,7,7.6C7,7.2,7,6.6,7.3,6c0,0,1.4,0,2.8,1.3 C10.6,7.1,11.3,7,12,7s1.4,0.1,2,0.3C15.3,6,16.8,6,16.8,6C17,6.6,17,7.2,17,7.6c0,0.8-0.1,1.2-0.2,1.4c0.7,0.8,1.2,1.8,1.2,3 c0,2.2-1.7,3.5-4,4c0.6,0.5,1,1.4,1,2.3v3.3c4.1-1.3,7-5.1,7-9.5C22,6.1,16.9,1.4,10.9,2.1z" />
   </svg>
@@ -177,20 +174,9 @@ const navStyles = defineStyles({
     border: `1px solid ${color("var(--primary-100)", 50)}`,
     "border-radius": "9999px",
   },
-  hoverableText: {
-    "color": "var(--primary-300)",
-    "fill": "var(--primary-300)",
-    "stroke": "var(--primary-300)",
-
-    "transition": "all 0.2s",
-
-    "&:hover": {
-      "color": "var(--primary-400)",
-      "fill": "var(--primary-400)",
-      "stroke": "var(--primary-400)",
-    },
-  },
 });
+
+const hoverClasses = `text-primary-300 hover:text-primary-500 fill-primary-300 hover:fill-primary-500 stroke-primary-300 hover:stroke-primary-500 transition-colors`;
 
 const Nav = () => {
   const closeMobileNav = () => showMobileNavMenu.value = false;
@@ -202,7 +188,7 @@ const Nav = () => {
     <Show when={mounted()}>
       <nav style={css(navStyles.root)}>
         <ul class="hidden md:flex items-center gap-4">
-          <li style={css(navStyles.hoverableText)} class="flex items-center">
+          <li class={cx(hoverClasses, "flex items-center")}>
             <a
               href="https://github.com/b3nten"
               target="_blank"
@@ -211,7 +197,7 @@ const Nav = () => {
               <Github size={30} />
             </a>
           </li>
-          <li style={css(navStyles.hoverableText)} class="flex items-center">
+          <li class={cx(hoverClasses, "flex items-center")}>
             <a
               href="https://www.artstation.com/benten28"
               target="_blank"
@@ -220,14 +206,13 @@ const Nav = () => {
               <Artstation />
             </a>
           </li>
-          <li style={css(navStyles.hoverableText)} class="flex items-center">
+          <li class={cx(hoverClasses, "flex items-center")}>
             <Settings />
           </li>
         </ul>
         <a
           href="/"
-          style={css(navStyles.hoverableText)}
-          class="text-3xl"
+          class={cx(hoverClasses, "text-3xl")}
           aria-label="home"
         >
           B<span class="flip">E</span>NT<span class="flip">E</span>N
@@ -237,7 +222,7 @@ const Nav = () => {
             <a
               href="/thoughts"
               aria-label="thoughts"
-              style={css(navStyles.hoverableText)}
+              class={cx(hoverClasses)}
             >
               TH0UGHTS
             </a>
@@ -246,15 +231,14 @@ const Nav = () => {
             <a
               href="/bio"
               aria-label="bio"
-              style={css(navStyles.hoverableText)}
+              class={cx(hoverClasses)}
             >
               BI0
             </a>
           </li>
         </ul>
         <button
-          style={css(navStyles.hoverableText)}
-          class="md:hidden cursor-pointer"
+          class={cx(hoverClasses, "md:hidden cursor-pointer")}
           onClick={() => showMobileNavMenu.value = true}
         >
           M<span class="flip">E</span>NU
@@ -273,24 +257,21 @@ const Nav = () => {
               <div class="flex items-center justify-between">
                 <a
                   href="/"
-                  style={css(navStyles.hoverableText)}
-                  class="text-3xl cursor-pointer"
+                  class={cx(hoverClasses, "text-3xl cursor-pointer")}
                   aria-label="home"
                   onclick={closeMobileNav}
                 >
                   B<span class="flip">E</span>NT<span class="flip">E</span>N
                 </a>
                 <button
-                  style={css(navStyles.hoverableText)}
-                  class="text-2xl font-bold font-display"
+                  class={cx(hoverClasses, "text-2xl font-bold font-display")}
                   onclick={closeMobileNav}
                 >
                   CLOS<span class="flip">E</span>
                 </button>
               </div>
               <ul
-                style={css(navStyles.hoverableText)}
-                class="flex flex-col items-start gap-4 text-2xl mt-12"
+                class={cx(hoverClasses, "flex flex-col items-start gap-4 text-2xl mt-1")}
               >
                 <li>
                   <a

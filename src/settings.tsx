@@ -38,7 +38,7 @@ const Colors = () => {
           <>
             <div class="flex items-center space-x-2">
               <ColorPicker.Control>
-                <ColorPicker.Trigger class="cursor-pointer w-6 h-6 rounded-full overflow-clip">
+                <ColorPicker.Trigger class="cursor-pointer w-6 h-6 rounded-full overflow-clip ">
                   <ColorPicker.Swatch
                     class="w-full h-full"
                     value={api().value}
