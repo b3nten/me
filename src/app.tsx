@@ -1,5 +1,5 @@
 import { HydrationScript, NoHydration } from "solid-js/web";
-import { createBackgroundEffect } from "./webgl/background";
+import { createBackgroundEffect } from "./background";
 import { Route, Router, useLocation } from "@solidjs/router";
 import { css, defineStyles, styleSheet } from "./toolkit";
 import { showUi, timeFactor, webglLoaded } from "./globals";
@@ -39,8 +39,6 @@ const posts = postImports.map(([path, content]) => ({
     title: string;
     date: string;
   }>;
-
-  console.log(posts);
 
 /****************************************************************************************
  * Page Shell

@@ -1,9 +1,9 @@
 import { Geometry, Mesh, Program, Renderer, Vec2, Vec4 } from "ogl";
-import { createDisposable, update } from "../toolkit.ts";
+import { createDisposable, update } from "./toolkit.ts";
 import { Flowmap } from "./flow.js";
 import frag from "./background.frag?raw";
 import vert from "./background.vert?raw";
-import { primaryColor, timeFactor, webglLoaded } from "../globals";
+import { primaryColor, timeFactor, webglLoaded } from "./globals";
 
 export function createBackgroundEffect(target = document.body) {
   const { dispose, cleanup, disposableEvent } = createDisposable();
