@@ -34,31 +34,33 @@ const fonts = [
   />,
 ];
 
+const resources = getModuleInfo("src/client.jsx");
+
 const app = new Hono();
 
 app.get("*", async (c) => {
-  const resources = await getModuleInfo("src/client.jsx");
+  const r = await resources;
 
-  const head = [<script type="module" src={`/${resources.file}`} />, ...fonts];
+  const head = [<script type="module" src={`/${r.file}`} />, ...fonts];
 
-  if (resources.css?.length > 0) {
+  if (r.css?.length > 0) {
     head.push(
-      ...resources.css.map((href) => (
+      ...r.css.map((href) => (
         <link rel="stylesheet" href={`/${href}`} />
       )),
     );
   }
 
-  if (resources.assets?.length > 0) {
+  if (r.assets?.length > 0) {
     head.push(
-      ...resources.assets.map((href) => (
+      ...r.assets.map((href) => (
         <script type="module" src={`/${href}`} />
       )),
     );
   }
 
-  if (resources.imports?.length > 0) {
-    for await (const href of resources.imports) {
+  if (r.imports?.length > 0) {
+    for await (const href of r.imports) {
       head.push(
         <script type="module" src={`/${(await getModuleInfo(href))?.file}`} />,
       );

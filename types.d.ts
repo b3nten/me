@@ -10,3 +10,10 @@ declare module "#vono/assets" {
 declare module "#vono/request" {
   export function getRequest(): Request | null;
 }
+
+declare module "*.mdx" {
+  import { Component } from "solid-js";
+  const component: Component;
+  export default component;
+  export const frontmatter: Record<string, any>;
+}

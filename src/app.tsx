@@ -1,9 +1,9 @@
 import { HydrationScript, NoHydration } from "solid-js/web";
 import { createBackgroundEffect } from "./webgl/background";
 import { Route, Router, useLocation } from "@solidjs/router";
-import { color, css, cx, defineStyles, styleSheet } from "./toolkit";
-import { showMobileNavMenu, showUi, timeFactor, webglLoaded } from "./globals";
-import { Transition, TransitionGroup } from "solid-transition-group";
+import { css, defineStyles, styleSheet } from "./toolkit";
+import { showUi, timeFactor, webglLoaded } from "./globals";
+import { TransitionGroup } from "solid-transition-group";
 import {
   Component,
   createEffect,
@@ -22,20 +22,25 @@ import { Nav } from "./nav";
  *****************************************************************************************/
 
 const postImports = Object.entries(
-  import.meta.glob("../content/thoughts/**.*", { eager: true }),
+  import.meta.glob("../content/thoughts/**.mdx", { eager: true }),
 );
+
 const posts = postImports.map(([path, content]) => ({
   // @ts-ignore
-  ...content,
+  Component: content.default,
   slug: path.split("/").pop().split(".")[0],
+  ...content.frontmatter,
 }))
   .sort((a, b) =>
     new Date(b.date).getMilliseconds() - new Date(a.date).getMilliseconds()
   ) as Array<{
-    default: Component;
+    Component: Component;
     slug: string;
-    meta: any;
+    title: string;
+    date: string;
   }>;
+
+  console.log(posts);
 
 /****************************************************************************************
  * Page Shell
@@ -71,7 +76,10 @@ export default function App(props) {
                     <Route path="/" component={ThoughtList} />
                     <For each={posts}>
                       {(post) => (
-                        <Route path={post.slug} component={post.default} />
+                        <Route 
+                          path={post.slug} 
+                          component={() => <Thought Component={post.Component} title={post.title} date={post.date} />} 
+                        />
                       )}
                     </For>
                   </Route>
@@ -154,6 +162,42 @@ const BlurredBackground = (props: ParentProps) => (
     <div class="-z-20 fixed inset-0 bg-primary-900/60 backdrop-blur-lg" />
   </>
 );
+
+
+const LeftArrow = (props: { size?: number }) => (
+  <svg
+    width={props.size ?? 24}
+    height={props.size ?? 24}
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+    viewBox="0 0 330.002 330.002"
+  >
+    <path d="M233.25,306.001L127.5,165.005L233.25,24.001c4.971-6.628,3.627-16.03-3-21c-6.627-4.971-16.03-3.626-21,3  L96.75,156.005c-4,5.333-4,12.667,0,18l112.5,149.996c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001  C236.878,322.03,238.221,312.628,233.25,306.001z" />
+  </svg>
+);
+
+export function Thought(props: ParentProps<{ Component: Component, title: string, date: string }>) {
+  return (
+    <div class="text-white max-w-3xl mx-auto">
+      <Title>{props.title}</Title>
+      <a
+        class="text-lg opacity-50 hover:opacity-100 hover:bg-gray/50 transition rounded-md p-2 font-display inline-flex items-center -translate-x-3 space-x-2"
+        href="/thoughts"
+      >
+        <LeftArrow size={18} /> back
+      </a>
+      <h1 class="text-4xl md:text-7xl font-bold leading-tight">
+        {props.title}
+      </h1>
+      <div class="mt-2 md:text-lg font-display flex items-center space-x-2">
+        <p class="opacity-50">{props.date}</p>
+      </div>
+      <article class="mt-20 text-lg font-serif">
+        <props.Component />
+      </article>
+    </div>
+  );
+}
 
 /****************************************************************************************
  * Routes
@@ -254,12 +298,12 @@ const ThoughtList = () => {
         <For each={posts}>
           {(post) => (
             <li>
-              <div class="text-white/60">{formatDate(post.meta.date)}</div>
+              <div class="text-white/60">{formatDate(post.date)}</div>
               <a
                 class="text-lg md:text-2xl text-white"
                 href={`/thoughts/${post.slug}`}
               >
-                {post.meta.title}
+                {post.title}
               </a>
             </li>
           )}
