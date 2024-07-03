@@ -38,6 +38,22 @@ const resources = getModuleInfo("src/client.jsx");
 
 const app = new Hono();
 
+app.get("/posts/why-server-side-rendering-is-superior", c => {
+
+  const stream = new ReadableStream({
+    start(controller) {
+      controller.enqueue(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Why Server Side Rendering is Superior</title>`);
+    },
+  })
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/html",
+    },
+  });
+
+})
+
 app.get("*", async (c) => {
   const r = await resources;
 
