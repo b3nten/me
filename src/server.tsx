@@ -43,6 +43,11 @@ app.get("/posts/why-server-side-rendering-is-superior", c => {
 
   return stream(c, async (stream) => {
     await stream.writeln('<title>Why Server-Side Rendering is Superior</title>')
+    await stream.writeln(`<meta property="og:type" content="article">
+<meta property="og:title" content="Why SSR is better than SPA">
+<meta property="og:url" content="https://benten.garden/posts/why-server-side-rendering-is-superior">
+<meta property="og:image" content="https://miro.medium.com/v2/resize:fit:720/format:webp/1*CgrMqqxMCltl4BVjGgFRKA.png">
+<meta property="og:description" content="My argument for why SSR is better than SPA's.">`)
     await stream.sleep(10000)
     await stream.writeln(`<pre>Parse error: SYNTAX_ERROR, unexpected H_CLOSE_BRACKET, expecting H_CLOSE_BRACKET. 
 in C:\\xampp\\htdocs\\laravel\\public\\index.php on line 50`)
