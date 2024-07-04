@@ -43,7 +43,7 @@ app.get("/posts/why-server-side-rendering-is-superior", c => {
 
   return stream(c, async (stream) => {
     await stream.writeln('<title>Why Server-Side Rendering is Superior</title>')
-    await stream.sleep(20000)
+    await stream.sleep(10000)
     await stream.writeln(`<pre>Parse error: syntax error, unexpected T_CLASS, expecting T_STRING or T_VARIABLE or '$' 
 in C:\\xampp\\htdocs\\laravel\\public\\index.php on line 50`)
   })
