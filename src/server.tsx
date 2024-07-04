@@ -1,5 +1,6 @@
 import { getModuleInfo } from "#vono/assets";
 import { Hono } from "hono";
+import { stream } from 'hono/streaming'
 import { renderToString } from "solid-js/web";
 import SolidApp from "./app";
 
@@ -40,21 +41,10 @@ const app = new Hono();
 
 app.get("/posts/why-server-side-rendering-is-superior", c => {
 
-  const stream = new ReadableStream({
-    async start(controller) {
-      controller.enqueue(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Why Server Side Rendering is Superior</title>`);
-      setInterval(() => {
-        controller.enqueue(`<script>console.log("we do a lil trollin")</script>`);
-      }, 500)
-    },
+  return stream(c, async (stream) => {
+    await stream.writeln('<title>Why Server-Side Rendering is Superior</title>')
+    await stream.sleep(50000)
   })
-
-  return new Response(stream, {
-    headers: {
-      "Content-Type": "text/html",
-    },
-  });
-
 })
 
 app.get("*", async (c) => {
