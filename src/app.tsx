@@ -174,29 +174,6 @@ const LeftArrow = (props: { size?: number }) => (
   </svg>
 );
 
-export function Thought(props: ParentProps<{ Component: Component, title: string, date: string }>) {
-  return (
-    <div class="text-white max-w-3xl mx-auto">
-      <Title>{props.title}</Title>
-      <a
-        class="text-lg opacity-50 hover:opacity-100 hover:bg-gray/50 transition rounded-md p-2 font-display inline-flex items-center -translate-x-3 space-x-2"
-        href="/thoughts"
-      >
-        <LeftArrow size={18} /> back
-      </a>
-      <h1 class="text-4xl md:text-7xl font-bold leading-tight">
-        {props.title}
-      </h1>
-      <div class="mt-2 md:text-lg font-display flex items-center space-x-2">
-        <p class="opacity-50">{props.date}</p>
-      </div>
-      <article class="mt-20 text-lg font-serif">
-        <props.Component />
-      </article>
-    </div>
-  );
-}
-
 /****************************************************************************************
  * Routes
  *****************************************************************************************/
@@ -328,3 +305,29 @@ const Bio = () => {
     </div>
   );
 };
+
+export function Thought(props: ParentProps<{ Component: Component, title: string, date: string }>) {
+  return (
+    <div class="text-white max-w-3xl mx-auto mb-32">
+      <Title>{props.title}</Title>
+      <a
+        class="text-lg opacity-50 hover:opacity-100 hover:bg-gray/50 transition rounded-md p-2 font-display inline-flex items-center -translate-x-3 space-x-2"
+        href="/thoughts"
+      >
+        <LeftArrow size={18} /> back
+      </a>
+      <h1 class="text-4xl md:text-7xl font-bold leading-tight">
+        {props.title}
+      </h1>
+      <div class="mt-2 md:text-lg font-display flex items-center space-x-2">
+        <p class="opacity-50">{props.date}</p>
+      </div>
+      <article class="mt-20 text-lg font-serif space-y-4">
+        <props.Component components={{
+          p: (props) => <p class="text-white text-xl font-serif" {...props} />,
+          code: (props) => <code class="text-primary-300 font-mono" {...props} />,
+        }} />
+      </article>
+    </div>
+  );
+}

@@ -25,7 +25,7 @@
     --color-gray-900: #3d3d3d;
     --color-gray-950: #000000;
 
-    --font-family-serif: Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-family-serif: Domine, Georgia, Cambria, "Times New Roman", Times, serif;
     --font-family-sans: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
     --font-family-display: Play;
 }
@@ -60,6 +60,14 @@ body {
     --gray-900: #3d3d3d;
     --gray-950: #000000;
 }
+
+@font-face {
+    font-family: "Domine";
+    src: url("/Domine.ttf");
+    font-weight: 125 950;
+    font-stretch: 75% 125%;
+    font-style: normal;
+  }
 
 @font-face {
     font-family: Inter;
