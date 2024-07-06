@@ -8,6 +8,13 @@ const fonts = [
   <link
     rel="preload"
     as="font"
+    type="font/ttf"
+    crossOrigin="anonymous"
+    href="/Domine.ttf"
+  />,
+  <link
+    rel="preload"
+    as="font"
     type="font/woff2"
     crossOrigin="anonymous"
     href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZJhiI2B.woff2"
